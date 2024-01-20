@@ -28,7 +28,7 @@ services:
     env_file:
       - ./backend-flask/.env
     container_name: backend
-    build: ./backend
+    build: ./backend-flask
     depends_on:
       - mysql
     ports:
