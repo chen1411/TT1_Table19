@@ -31,5 +31,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Build Docker image
+        run: docker build -t frontend:latest .
+
+      - name: Run Docker image
+        run: docker run -d --name frontend -p 3000:3000 frontend:latest
+
+      - name: Check running container
+        run: docker ps
+
     #   - name: Lint Codebase
     #     run: npm run lint
