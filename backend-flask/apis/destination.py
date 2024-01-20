@@ -19,6 +19,9 @@ blp = Blueprint("Destinations", "destinations", description="Operations on desti
 
 @blp.route("/destinations")
 class CreateDestination(MethodView):
+    def get(self):
+        destinations = DestinationModel.query.all()
+        return jsonify([{'id': destination.id, 'country_id': destination.country_id, 'cost': destination.cost, 'name': destination.name, 'notes': destination.notes} for destination in destinations]), 200
     def post(self):
         destination_data = request.json
         destination = DestinationModel(**destination_data)
@@ -57,4 +60,9 @@ class Destination(MethodView):
 
         db.session.add(destination)
         db.session.commit()
+
+    @jwt_required()
+    def get(self, destination_id):
+        destination = DestinationModel.query.get_or_404(destination_id)
+        return jsonify(destination_id=destination.id, country_id=destination.country_id, name=destination.name, cost=destination.cost, notes=destination.notes), 200
 
