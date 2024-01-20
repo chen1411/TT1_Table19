@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/bin/env sh
 
 sleep 2
 flask db init >> /dev/null

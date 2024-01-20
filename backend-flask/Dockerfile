@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.8
+FROM python:3.11-alpine
 
 # Set the working directory in the container
 WORKDIR /app
@@ -12,4 +12,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install --no-cache-dir Flask-JWT-Extended
 
 # Run python when the container launches
-CMD ["./entrypoint.sh"]
+CMD ["sh", "/app/entrypoint.sh"]
