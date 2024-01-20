@@ -37,5 +37,4 @@ jobs:
   
       - name: Build Docker image
         run: docker build -t frontend:latest .
-
-    # Todolist: Implement backend code
+ # Todolist: Implement backend code
