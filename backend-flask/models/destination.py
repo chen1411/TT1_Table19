@@ -2,6 +2,8 @@ from db import db
 
 
 class DestinationModel(db.Model):
+    __tablename__ = "destination"
+
     id = db.Column(
         db.Integer, primary_key=True, nullable=False, autoincrement=True
     )

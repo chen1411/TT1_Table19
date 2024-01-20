@@ -12,6 +12,9 @@ import models
 
 from apis.users import blp as UserBlueprint
 from apis.country import blp as CountryBlueprint
+from apis.itinerary_destination import blp as ItineraryDestinationBlueprint
+from apis.destination import blp as DestinationBlueprint
+from apis.itinerary import blp as ItineraryBlueprint
 
 app = Flask(__name__)
 load_dotenv()
@@ -79,5 +82,7 @@ def token_not_fresh_callback(jwt_header, jwt_payload):
 #     db.create_all()
 
 api.register_blueprint(UserBlueprint)
-
 api.register_blueprint(CountryBlueprint)
+api.register_blueprint(ItineraryDestinationBlueprint)
+api.register_blueprint(DestinationBlueprint)
+api.register_blueprint(ItineraryBlueprint)
