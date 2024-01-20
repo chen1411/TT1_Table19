@@ -2,7 +2,7 @@ name: Continuous Integration Workflow - Backend
 on:
   pull_request:
     branches:
-      - main # Run the workflow only on pull requests to the main branch
+      - master # Run the workflow only on pull requests to the main branch
     paths:
       - 'backend/**' # Workflow triggered on changes to code within express directory
       - '.github/workflows/backend_ci.yml'
