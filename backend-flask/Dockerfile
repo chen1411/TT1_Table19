@@ -17,4 +17,4 @@ COPY .env /app
 ENV ENV_FILE .env
 
 # Run python when the container launches
-CMD ["python", "your_script.py"]
+CMD ["flask", "run"]

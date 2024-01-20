@@ -1,16 +1,6 @@
 version: "3"
 
 services:
-  
-  postgres:
-    container_name: postgres
-    image: postgres:latest
-    environment:
-      - POSTGRES_HOST_AUTH_METHOD=trust
-    ports:
-      - 5432:5432
-    volumes:
-      - ./migrations/0_CREATE_TABLE.sql:/docker-entrypoint-initdb.d/0_CREATE_TABLE.sql
 
   # frontend:
   #   env_file:
@@ -34,21 +24,21 @@ services:
 
   # Add any new services below 
 
-  # backend:
-  #   env_file:
-  #     - ./backend/.env
-  #   container_name: backend
-  #   build: ./backend
-  #   depends_on:
-  #     - mysql
-  #   ports:
-  #     - 5000:5000
+  backend:
+    env_file:
+      - ./backend-flask/.env
+    container_name: backend
+    build: ./backend
+    depends_on:
+      - mysql
+    ports:
+      - 5000:5000
 
   frontend:
-      #env_file:
-      #  - ./frontend/.env.prod
-      container_name: frontend
-      build: ./frontend
-      ports:
-        - 80:80
+    #env_file:
+    #  - ./frontend/.env.prod
+    container_name: frontend
+    build: ./frontend
+    ports:
+      - 80:80
 
