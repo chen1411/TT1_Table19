@@ -36,6 +36,6 @@ jobs:
           fail_on_empty: false
 
       
-      #- name: Orchestrate services
-      #  run: docker-compose -f "docker-compose.yml" up -d --build
-      #  working-directory: ./
+      - name: Orchestrate services
+        run: docker-compose -f "docker-compose.yml" up -d --build
+        working-directory: ./

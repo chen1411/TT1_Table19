@@ -9,6 +9,7 @@ COPY . /app
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir Flask-JWT-Extended
 
 # Copy the environment file into the container
 COPY .env /app
