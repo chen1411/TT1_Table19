@@ -1,25 +1,57 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css'
+
+import UserContext from './context/UserContext';
+import { NavBar, Login, Signup, Home } from './components'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    const [userData, setUserData] = useState({
+        token: undefined,
+        user: undefined,
+    });
+
+    useEffect(() => {
+        const checkLoggedIn = async () => {
+            let token = localStorage.getItem("auth-token");
+            if (token === null) {
+                localStorage.setItem("auth-token", "");
+                token = "";
+            }
+            const tokenResponse = await axios.post(
+                "http://localhost:8080/validate",
+                null,
+                { headers: { "x-auth-token": token } }
+            );
+            if (tokenResponse.data) {
+                const userRes = await axios.get("http://localhost:8080/getUser", {
+                    headers: { "x-auth-token": token },
+                });
+                setUserData({
+                    token,
+                    user: userRes.data,
+                });
+            }
+        };
+        checkLoggedIn();
+    }, []);
+
+    return (
+        <Router>
+            <UserContext.Provider value={{ userData, setUserData }}>
+                <NavBar />
+                <Routes>
+                    <Route exact path="/" element={<Home />} />
+                    <Route exact path='/login' element={<Login />} />
+                    <Route exact path="/signup" element={<Signup />} />
+
+                </Routes>
+            </UserContext.Provider>
+        </Router>
+    )
 }
 
 export default App;
