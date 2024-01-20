@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: db
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: mysql
+
+  backend:
+    env_file:
+      - ./backend-flask/.env.docker-local
+    container_name: backend
+    build: ./backend-flask
+    depends_on:
+      - mysql
+    ports:
+      - 5000:5000
+
+  frontend:
+    #env_file:
+    #  - ./frontend/.env.prod
+    container_name: frontend
+    build: ./frontend
+    ports:
+      - 3000:3000
+
