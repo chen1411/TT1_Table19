@@ -25,6 +25,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+        
       - name: Orchestrate microservices
         run: docker-compose -f "docker-compose.yml" up -d --build
         working-directory: ./
