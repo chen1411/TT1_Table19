@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 import UserContext from './context/UserContext';
+import DestinationCreate from './destination/create';
+import DestinationEdit from './destination/edit';
 import { NavBar, Login, Signup, Home } from './components'
 
 function App() {
@@ -14,30 +16,30 @@ function App() {
         user: undefined,
     });
 
-    useEffect(() => {
-        const checkLoggedIn = async () => {
-            let token = localStorage.getItem("auth-token");
-            if (token === null) {
-                localStorage.setItem("auth-token", "");
-                token = "";
-            }
-            const tokenResponse = await axios.post(
-                "http://localhost:8080/validate",
-                null,
-                { headers: { "x-auth-token": token } }
-            );
-            if (tokenResponse.data) {
-                const userRes = await axios.get("http://localhost:8080/getUser", {
-                    headers: { "x-auth-token": token },
-                });
-                setUserData({
-                    token,
-                    user: userRes.data,
-                });
-            }
-        };
-        checkLoggedIn();
-    }, []);
+    // useEffect(() => {
+    //     const checkLoggedIn = async () => {
+    //         let token = localStorage.getItem("auth-token");
+    //         if (token === null) {
+    //             localStorage.setItem("auth-token", "");
+    //             token = "";
+    //         }
+    //         const tokenResponse = await axios.post(
+    //             "http://localhost:8080/validate",
+    //             null,
+    //             { headers: { "x-auth-token": token } }
+    //         );
+    //         if (tokenResponse.data) {
+    //             const userRes = await axios.get("http://localhost:8080/getUser", {
+    //                 headers: { "x-auth-token": token },
+    //             });
+    //             setUserData({
+    //                 token,
+    //                 user: userRes.data,
+    //             });
+    //         }
+    //     };
+    //     checkLoggedIn();
+    // }, []);
 
     return (
         <Router>
@@ -47,7 +49,8 @@ function App() {
                     <Route exact path="/" element={<Home />} />
                     <Route exact path='/login' element={<Login />} />
                     <Route exact path="/signup" element={<Signup />} />
-
+                    <Route exact path="destination/create" element={<DestinationCreate />} />
+                    <Route exact path="destination/:destinationId" element={<DestinationEdit />} />
                 </Routes>
             </UserContext.Provider>
         </Router>
