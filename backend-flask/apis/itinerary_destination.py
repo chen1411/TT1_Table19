@@ -25,7 +25,7 @@ class GetItineraryDestination(MethodView):
 @blp.route("/itinerary_destination")
 class AddItineraryDestination(MethodView):
     @jwt_required()
-    def put(self): 
+    def post(self): 
         itinerary_destination_data = request.json
         itinerary_destination = ItineraryDestinationModel(
             itinerary_id=itinerary_destination_data["itinerary_id"], 
@@ -49,7 +49,7 @@ class DeletetineraryDestination(MethodView):
 @blp.route("/itinerary_destination")
 class UpdatetineraryDestination(MethodView):
     @jwt_required()
-    def post(self): 
+    def put(self): 
         itinerary_destination_data = request.json
         existing_itinerary_destination = ItineraryDestinationModel.query.get(itinerary_destination_data['id'])
 
