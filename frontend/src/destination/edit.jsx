@@ -1,8 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import { Form, Row, Button, Alert, Container, Col } from 'react-bootstrap';
+import Offcanvas from 'react-bootstrap/Offcanvas';
 
 const DestinationEdit = () => {
+  const [showCanvas, setCanvas] = useState(false); 
+
+  const handleClose = () => setCanvas(false); 
+  const handleShow = () => setCanvas(true);
+
   const {destinationId} = useParams();
 
   const [destination, setDestination] = useState({});
@@ -74,34 +80,37 @@ const DestinationEdit = () => {
   <Container>    
     {alert.message && <Alert key={alert.type} variant={alert.type} className='my-2'>{alert.message}</Alert>}
     <h1 className='mt-1'>Update an Existing Destination</h1>
-    <Form onSubmit={handleSubmit} className='m-3'>
-      <Row className='mb-3' rows={3}>
-        <Form.Label>Destination Name</Form.Label>
-        <Form.Control required type='text' placeholder='Enter Destination Name' onChange={handleInputChange} id='name' value={destination.name}/>
-      </Row>
-      <Row className='mb-3' rows={3}>
-        <Form.Label>Country</Form.Label>
-        <Form.Select placeholder="Select a country" onChange={handleInputChange} id='countryId' value={destination.countryId}>
-          {countries.map((country) => {
-            return (<option value={country.id}>{country.name}</option>)
-          })}
-        </Form.Select>
-      </Row>
-      <Row className='mb-3' rows={3}>
-        <Form.Label>Destination Cost</Form.Label>
-        <Form.Control required type='number' placeholder='Enter Destination Cost' onChange={handleInputChange} id='cost' value={destination.cost}/>
-      </Row>
-      <Row className='mb-3'>
-        <Form.Label>Destination Notes</Form.Label>
-        <Form.Control as='textarea' placeholder='Enter Destination Notes' onChange={handleInputChange} id='notes' value={destination.notes}/>
-      </Row>
-      <Row>
-        <Col>
-          <Button className='mr-2' type="submit">Update Destination</Button>
-          <Button className='mx-2' onClick={handleDelete} variant="danger">Delete Destination</Button>
-        </Col>
-      </Row>
-    </Form>
+    <Button variant="primary" onClick={handleShow}> Launch </Button>
+    <Offcanvas show={showCanvas} onHide={handleClose}>
+        <Form onSubmit={handleSubmit} className='m-3'>
+        <Row className='mb-3' rows={3}>
+            <Form.Label>Destination Name</Form.Label>
+            <Form.Control required type='text' placeholder='Enter Destination Name' onChange={handleInputChange} id='name' value={destination.name}/>
+        </Row>
+        <Row className='mb-3' rows={3}>
+            <Form.Label>Country</Form.Label>
+            <Form.Select placeholder="Select a country" onChange={handleInputChange} id='countryId' value={destination.countryId}>
+            {countries.map((country) => {
+                return (<option value={country.id}>{country.name}</option>)
+            })}
+            </Form.Select>
+        </Row>
+        <Row className='mb-3' rows={3}>
+            <Form.Label>Destination Cost</Form.Label>
+            <Form.Control required type='number' placeholder='Enter Destination Cost' onChange={handleInputChange} id='cost' value={destination.cost}/>
+        </Row>
+        <Row className='mb-3'>
+            <Form.Label>Destination Notes</Form.Label>
+            <Form.Control as='textarea' placeholder='Enter Destination Notes' onChange={handleInputChange} id='notes' value={destination.notes}/>
+        </Row>
+        <Row>
+            <Col>
+            <Button className='mr-2' type="submit">Update Destination</Button>
+            <Button className='mx-2' onClick={handleDelete} variant="danger">Delete Destination</Button>
+            </Col>
+        </Row>
+        </Form>
+    </Offcanvas>
   </Container>
   )
 }
