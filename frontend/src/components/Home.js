@@ -69,17 +69,27 @@ function Home() {
   const deleteItinerary = async (id) => {
     console.log(id);
     // call delete  itinerary endpoint, input: user id from local storage
-    try {
-      const res = await fetch(
-        `http://localhost:5000/itinerary_destination/${id}`,
-        { method: "DELETE" }
-      );
-      const data = await res.json();
-      console.log(data);
-    } catch (e) {
-      console.log("");
-      alert("Error in deleting itinerary, please try again!")
-    }
+    axios.interceptors.request.use(
+        async function (config) {
+          // Check if accessToken is present
+            const sessionCookie = localStorage.getItem('auth-token')
+      
+            if (sessionCookie !== null && sessionCookie !== undefined) {
+              config.headers.Authorization = `Bearer ${sessionCookie}`
+            }
+            console.log(sessionCookie);
+      
+            return config
+          },
+          async function (error) {
+            return await Promise.reject(error)
+          }
+        )
+    const res = await axios.delete(`http://localhost:5000/itinerary_destination/${id}`);
+
+
+    const data = await res.data;
+    console.log(data)
 
     // setItineraries(itineraries.filter((itinerary) => itinerary.id !== id));
   };
