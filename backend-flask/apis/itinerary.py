@@ -45,7 +45,12 @@ class ItineraryList(MethodView):
                     ItineraryDestinationModel.destination_id
                     == DestinationModel.id,
                 )
-                .add_column(DestinationModel.name)
+                .add_columns(
+                    DestinationModel.name,
+                    DestinationModel.cost,
+                    DestinationModel.notes,
+                    DestinationModel.country_id,
+                )
                 .all()
             )
             itineraries.append(
@@ -56,7 +61,13 @@ class ItineraryList(MethodView):
                     "budget": itinerary.budget,
                     "title": itinerary.title,
                     "destinations": [
-                        {"id": dest[1], "name": dest[2]}
+                        {
+                            "id": dest[1],
+                            "name": dest[2],
+                            "cost": dest[3],
+                            "notes": dest[4],
+                            "country_id": dest[5],
+                        }
                         for dest in destinations
                     ],
                 }
