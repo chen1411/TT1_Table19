@@ -11,7 +11,24 @@ const DestinationCreate = () => {
 
   useEffect(() => {
     // Fetch list of available countries + ids.
-    const countriesData = [{id: 1, name: "Singapore"}, {id: 2, name: "Malaysia"}]
+    axios.interceptors.request.use(
+      async function (config) {
+        // Check if accessToken is present
+          const sessionCookie = localStorage.getItem('auth-token')
+    
+          if (sessionCookie !== null && sessionCookie !== undefined) {
+            config.headers.Authorization = `Bearer ${sessionCookie}`
+          }
+    
+          return config
+        },
+        async function (error) {
+          return await Promise.reject(error)
+        }
+      )
+
+      const countriesData = await axios.get('localhost:5000/countries');
+    
     setCountries(countriesData);
   }, [])
 
@@ -58,13 +75,6 @@ const DestinationCreate = () => {
       setAlert({message: 'An error occurred while creating the destination. Please refresh the page and try again.', type: 'danger'})
       return;
     }
-    // Make request
-    // Redirect
-
-
-
-
-
   }
 
   return (

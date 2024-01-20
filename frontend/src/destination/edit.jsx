@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import { Form, Row, Button, Alert, Container, Col } from 'react-bootstrap';
 import Offcanvas from 'react-bootstrap/Offcanvas';
+import axios from 'axios';
 
 const DestinationEdit = () => {
   const [showCanvas, setCanvas] = useState(false); 
@@ -29,14 +30,43 @@ const DestinationEdit = () => {
   }, [])
 
   const fetchCountries = async () => {
-    // Replace with fetch all countries API call.
-    const countriesData = [{id: 1, name: "Singapore"}, {id: 2, name: "Malaysia"}]
+    axios.interceptors.request.use(
+      async function (config) {
+        // Check if accessToken is present
+          const sessionCookie = localStorage.getItem('auth-token')
+    
+          if (sessionCookie !== null && sessionCookie !== undefined) {
+            config.headers.Authorization = `Bearer ${sessionCookie}`
+          }
+    
+          return config
+        },
+        async function (error) {
+          return await Promise.reject(error)
+        }
+      )
+
+    const countriesData = axios.get('localhost:5000/country');
     return countriesData;
   }
 
   const fetchExistingDestination = async (destinationId) => {
-    // Replace with fetch single destination API call
-    const destinationData = {name: 'Test Destination', cost: 70, notes: "This is a description", countryId: 1};
+    axios.interceptors.request.use(
+      async function (config) {
+        // Check if accessToken is present
+          const sessionCookie = localStorage.getItem('auth-token')
+    
+          if (sessionCookie !== null && sessionCookie !== undefined) {
+            config.headers.Authorization = `Bearer ${sessionCookie}`
+          }
+    
+          return config
+        },
+        async function (error) {
+          return await Promise.reject(error)
+        }
+      )
+    const destinationData = await axios.get(`localhost:5000/destination/${destinationId}`);
     return destinationData;
   }
 
@@ -63,17 +93,11 @@ const DestinationEdit = () => {
       setAlert({message: 'An error occurred while creating the destination. Please refresh the page and try again.', type: 'danger'})
       return;
     }
-
-    // Make request
-    // Redirect
   }
 
-  const handleDelete = (e) => {
+  const handleDelete = async (e) => {
     e.preventDefault();
-
-    // Make request to delete.
-    console.log('delete')
-    
+    return await axios.delete(`localhost:5000/destination/${destinationId}`);
   }
 
   return (
