@@ -28,13 +28,15 @@ jobs:
         with:
           envkey_DB_URL: ${{ secrets.DB_URL }}
           envkey_JWT_SCRET_KEY: ${{ secrets.JWT_SCRET_KEY }}
-          directory: ./
+          directory: ./backend-flask
           file_name: .env
           fail_on_empty: false
     
       - name: Install dependencies
         run: npm install
+        working-directory: ./backend-flask 
   
       - name: Build Docker image
         run: docker build -t frontend:latest .
+        working-directory: ./backend-flask 
  # Todolist: Implement backend code
