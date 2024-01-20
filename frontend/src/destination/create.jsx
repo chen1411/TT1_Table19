@@ -27,7 +27,7 @@ const DestinationCreate = () => {
         }
       )
 
-      const countriesData = await axios.get('localhost:5000/countries');
+      const countriesData = axios.get('localhost:5000/countries');
     
     setCountries(countriesData);
   }, [])
@@ -67,6 +67,7 @@ const DestinationCreate = () => {
       name: destination.name,
       notes: destination.notes
     }
+    
     const createdDestination = axios.post("http://localhost:5000/destinations", createDestination);
     if (createdDestination) {
       setAlert({message: 'Please ensure that the destination name, country and cost is selected before submitting.', type: 'success'})
