@@ -29,6 +29,8 @@ class UserRegister(MethodView):
         user = UserModel(
             username=user_data["username"],
             password=pbkdf2_sha256.hash(user_data["password"]),
+            firstname=user_data["firstname"],
+            lastname=user_data["lastname"]
         )
         db.session.add(user)
         db.session.commit()
