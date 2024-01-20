@@ -10,7 +10,7 @@ blp = Blueprint("Country", "country", description="Operations on country")
 class GetCountryName(MethodView):
     def get(self, cid): 
         country = CountryModel.query.get(cid)
-        return jsonify(id=country.id, name=country.name) if country else jsonify(message="Country not found"), 404
+        return jsonify(id=country.id, name=country.name), 200
 
 @blp.route("/add_country")
 class InsertCountry(MethodView):
