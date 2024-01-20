@@ -7,7 +7,7 @@ from flask_migrate import Migrate
 import os
 from dotenv import load_dotenv
 from blocklist import BLOCKLIST
-import flask_cors import CORS
+from flask_cors import CORS
 
 import models
 
