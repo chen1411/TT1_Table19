@@ -5,7 +5,7 @@ import Accordion from "react-bootstrap/Accordion";
 import Stack from "react-bootstrap/Stack";
 import ListGroup from "react-bootstrap/ListGroup";
 import "bootstrap-icons/font/bootstrap-icons.css";
-
+import axios from "axios";
 function Home() {
   // const { userData } = useContext(UserContext);
 
@@ -43,8 +43,25 @@ function Home() {
   }, []);
 
   const fetchItineraries = async () => {
-    const res = await fetch("http://localhost:5000/itinerary");
-    const data = await res.json();
+    axios.interceptors.request.use(
+        async function (config) {
+          // Check if accessToken is present
+            const sessionCookie = localStorage.getItem('auth-token')
+      
+            if (sessionCookie !== null && sessionCookie !== undefined) {
+              config.headers.Authorization = `Bearer ${sessionCookie}`
+            }
+            console.log(sessionCookie);
+      
+            return config
+          },
+          async function (error) {
+            return await Promise.reject(error)
+          }
+        )
+    const res = await axios.get("http://localhost:5000/itinerary");
+    console.log(res)
+    const data = await res.data;
 
     return data;
   };
@@ -52,9 +69,26 @@ function Home() {
   const deleteItinerary = async (id) => {
     console.log(id);
     // call delete  itinerary endpoint, input: user id from local storage
-    const res = await fetch(`http://localhost:5000/itinerary_destination/${id}`, { method: "DELETE" });
+    axios.interceptors.request.use(
+        async function (config) {
+          // Check if accessToken is present
+            const sessionCookie = localStorage.getItem('auth-token')
+      
+            if (sessionCookie !== null && sessionCookie !== undefined) {
+              config.headers.Authorization = `Bearer ${sessionCookie}`
+            }
+            console.log(sessionCookie);
+      
+            return config
+          },
+          async function (error) {
+            return await Promise.reject(error)
+          }
+        )
+    const res = await axios.delete(`http://localhost:5000/itinerary_destination/${id}`);
 
-    const data = await res.json();
+
+    const data = await res.data;
     console.log(data)
 
     // setItineraries(itineraries.filter((itinerary) => itinerary.id !== id));
