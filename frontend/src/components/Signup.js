@@ -8,8 +8,8 @@ import UserContext from "../context/UserContext";
 function Signup() {
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
-    const [name, setName] = useState();
-    const [role, setRole] = useState();
+    const [firstname, setFirstname] = useState();
+    const [lastname, setLastname] = useState();
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -21,17 +21,17 @@ function Signup() {
         e.preventDefault();
         setLoading(true);
         try {
-            const newUser = { username, password, name, role };
-            await axios.post("http://localhost:8080/signup", newUser);
-            const loginRes = await axios.post("http://localhost:8080/login", {
+            const newUser = { username, password, firstname, lastname };
+            await axios.post("http://localhost:5000/register", newUser);
+            const loginRes = await axios.post("http://localhost:5000/login", {
                 username,
                 password,
             });
             setUserData({
-                token: loginRes.data.token,
-                user: loginRes.data.user,
+                token: loginRes.access_token,
+                // user: loginRes.data.user,
             });
-            localStorage.setItem("auth-token", loginRes.data.token);
+            localStorage.setItem("auth-token", loginRes.access_token);
             setLoading(false);
             navigate("/");
         } catch (err) {
@@ -68,20 +68,20 @@ function Signup() {
                                     />
                                 </Form.Group>
                                 </Form.Group>
-                                <Form.Group id="name">
-                                    <Form.Label>Name</Form.Label>
+                                <Form.Group id="firstname">
+                                    <Form.Label>First Name</Form.Label>
                                     <Form.Control
                                         type="name"
                                         required
-                                        onChange={(e) => setName(e.target.value)}
+                                        onChange={(e) => setFirstname(e.target.value)}
                                     />
                                 </Form.Group>
-                                    <Form.Group id="role">
-                                    <Form.Label>Role</Form.Label>
+                                    <Form.Group id="lastname">
+                                    <Form.Label>Last Name</Form.Label>
                                     <Form.Control
-                                        type="role"
+                                        type="name"
                                         required
-                                        onChange={(e) => setRole(e.target.value)}
+                                        onChange={(e) => setLastname(e.target.value)}
                                     />
                                 </Form.Group>
                                 <Button disabled={loading} className="w-100 mt-2" type="submit">

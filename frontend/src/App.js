@@ -13,9 +13,10 @@ function App() {
 
     const [userData, setUserData] = useState({
         token: undefined,
-        user: undefined,
+        // user: undefined,
     });
 
+<<<<<<< Updated upstream
     // useEffect(() => {
     //     const checkLoggedIn = async () => {
     //         let token = localStorage.getItem("auth-token");
@@ -40,6 +41,38 @@ function App() {
     //     };
     //     checkLoggedIn();
     // }, []);
+=======
+    useEffect(() => {
+        const checkLoggedIn = async () => {
+            let token = localStorage.getItem("auth-token");
+            if (token === null) {
+                localStorage.setItem("auth-token", "");
+                token = "";
+            }
+            // const tokenResponse = await axios.post(
+            //     "http://localhost:5000/validate",
+            //     null,
+            //     { headers: { "x-auth-token": token } }
+            // );
+            // if (tokenResponse.data) {
+            //     const userRes = await axios.get("http://localhost:5000/getUser", {
+            //         headers: { "x-auth-token": token },
+            //     });
+            //     setUserData({
+            //         token,
+            //         user: userRes.data,
+            //     });
+            // }
+            else {
+                setUserData({
+                    token, 
+                    // user: userRes.data,
+                })
+            }
+        };
+        checkLoggedIn();
+    }, []);
+>>>>>>> Stashed changes
 
     return (
         <Router>

@@ -17,12 +17,12 @@ function Login() {
         setLoading(true);
         try {
             const loginUser = { username, password };
-            const loginRes = await axios.post("http://localhost:8080/login", loginUser);
+            const loginRes = await axios.post("http://localhost:5000/login", loginUser);
             setUserData({
-                token: loginRes.data.token,
-                user: loginRes.data.user,
+                token: loginRes.data.access_token,
+                // user: loginRes.data.user,
             });
-            localStorage.setItem("auth-token", loginRes.data.token);
+            localStorage.setItem("auth-token", loginRes.data.access_token);
             navigate("/"); navigate(0);
         } catch (err) {
             setLoading(false);
