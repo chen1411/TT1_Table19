@@ -5,7 +5,7 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 
 const EditOffCanvas = (props) => {
   console.log(props)
-  const {countries, destinationId, showCanvas, handleClose} = props;
+  const {countries, destinationId, showCanvas, handleClose, handleShow} = props;
 
   const [destination, setDestination] = useState({});
   const [alert, setAlert] = useState('');
@@ -92,6 +92,13 @@ const EditOffCanvas = (props) => {
         </Row>
         {alert && <Row>alert</Row>}
         </Form>
+        <Row>
+            <Button variant="primary" onClick={handleShow}> Launch </Button>
+            <Offcanvas show={showCanvas} onHide={handleClose}>
+                <Form.Label >Destination ID</Form.Label> {destinationId}
+                <Form.Label >Countries</Form.Label> {countries}
+            </Offcanvas>
+        </Row>
     </Offcanvas>
   )
 }
