@@ -6,17 +6,18 @@ from flask import request, jsonify
 
 blp = Blueprint("Country", "country", description="Operations on country")
 
-@blp.route("/country/<int:cid>")
-class GetCountryName(MethodView):
-    def get(self, cid): 
-        country = CountryModel.query.get(cid)
-        return jsonify(id=country.id, name=country.name) if country else jsonify(message="Country not found"), 404
 
-@blp.route("/add_country")
-class InsertCountry(MethodView):
-    def post(self): 
+@blp.route("/country")
+class CountryList(MethodView):
+    def get(self):
+        countries = CountryModel.query.all()
+        return jsonify([{"id": c.id, "name": c.name} for c in countries])
+
+    def post(self):
         country_data = request.json
-        if CountryModel.query.filter(CountryModel.name == country_data["country"]).first():
+        if CountryModel.query.filter(
+            CountryModel.name == country_data["country"]
+        ).first():
             abort(409, message="A user with that username already exists.")
 
         country = CountryModel(
@@ -26,3 +27,15 @@ class InsertCountry(MethodView):
         db.session.commit()
 
         return {"message": "Country created successfully."}, 201
+
+
+@blp.route("/country/<int:cid>")
+class GetCountryName(MethodView):
+    def get(self, cid):
+        country = CountryModel.query.get(cid)
+        return (
+            jsonify(id=country.id, name=country.name)
+            if country
+            else jsonify(message="Country not found"),
+            404,
+        )

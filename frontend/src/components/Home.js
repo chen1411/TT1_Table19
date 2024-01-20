@@ -38,7 +38,10 @@ function Home() {
   const deleteItinerary = async (id) => {
     console.log(id);
     // call delete  itinerary endpoint, input: user id from local storage
-    // await fetch(`http://localhost:5000/tasks/${id}`, { method: "DELETE" });
+    const res = await fetch(`http://localhost:5000/itinerary_destination/${id}`, { method: "DELETE" });
+
+    const data = await res.json();
+    console.log(data)
 
     // setItineraries(itineraries.filter((itinerary) => itinerary.id !== id));
   };
