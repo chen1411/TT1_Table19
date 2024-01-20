@@ -16,54 +16,103 @@ from passlib.hash import pbkdf2_sha256
 from db import db
 from models.itinerary import ItineraryModel
 
-blp = Blueprint("Itinerary", "itinerary", description="Operations on itineraries")
-
+blp = Blueprint(
+    "Itinerary", "itinerary", description="Operations on itineraries"
+)
 
 
 @blp.route("/itinerary")
 class ItineraryList(MethodView):
+    @jwt_required()
     def get(self):
-        itineraries = ItineraryModel.query.all()
-        return jsonify([{'id': itinerary.id, 'country_id': itinerary.country_id, 'user_id': itinerary.user_id, 'budget': itinerary.budget, 'title': itinerary.title} for itinerary in itineraries]), 200
+        uid = get_jwt_identity()
+        itineraries = ItineraryModel.query.filter_by(user_id=uid).all()
+        return (
+            jsonify(
+                [
+                    {
+                        "id": itinerary.id,
+                        "country_id": itinerary.country_id,
+                        "user_id": itinerary.user_id,
+                        "budget": itinerary.budget,
+                        "title": itinerary.title,
+                    }
+                    for itinerary in itineraries
+                ]
+            ),
+            200,
+        )
 
+    @jwt_required()
     def post(self):
         itinerary_data = request.json
-        itinerary = ItineraryModel(**itinerary_data)
+        uid = get_jwt_identity()
+        itinerary = ItineraryModel(user_id=uid, **itinerary_data)
 
         try:
             db.session.add(itinerary)
             db.session.commit()
         except SQLAlchemyError:
-            abort(500, message="An error occurred while inserting the itinerary.")
+            abort(
+                500, message="An error occurred while inserting the itinerary."
+            )
 
-        return jsonify(id=itinerary.id, name=itinerary.username, password=itinerary.password), 201
+        return (
+            jsonify(
+                id=itinerary.id,
+                country_id=itinerary.country_id,
+                user_id=itinerary.user_id,
+                budget=itinerary.budget,
+                title=itinerary.title
+            ),
+            201,
+        )
 
 
-@blp.route("/itinerary/<int:uid>")
+@blp.route("/itinerary/<int:iid>")
 class Itinerary(MethodView):
-    def get(self, uid):
-        itinerary = ItineraryModel.query.get_or_404(uid)
-        return jsonify(id=itinerary.id, country_id=itinerary.country_id, user_id=itinerary.user_id, budget=itinerary.budget, title=itinerary.title )
+    @jwt_required()
+    def get(self, iid):
+        itinerary = ItineraryModel.query.get_or_404(iid)
+        return jsonify(
+            id=itinerary.id,
+            country_id=itinerary.country_id,
+            user_id=itinerary.user_id,
+            budget=itinerary.budget,
+            title=itinerary.title,
+        )
 
     @jwt_required()
-    def delete(self, uid):
-        itinerary = Itinerary.query.get_or_404(uid)
+    def delete(self, iid):
+        itinerary = ItineraryModel.query.get_or_404(iid)
         db.session.delete(itinerary)
         db.session.commit()
         return jsonify(message="User deleted."), 200
 
-    def put(self, uid):
-        itinerary = ItineraryModel.query.get(uid)
+    @jwt_required()
+    def put(self, iid):
+        itinerary = ItineraryModel.query.get(iid)
         itinerary_data = request.json
 
         if itinerary:
-            itinerary.country_id = itinerary_data.get("country_id", itinerary.country_id)
+            itinerary.country_id = itinerary_data.get(
+                "country_id", itinerary.country_id
+            )
             itinerary.budget = itinerary_data.get("budget", itinerary.budget)
             itinerary.title = itinerary_data.get("title", itinerary.title)
         else:
-            itinerary = Itinerary(id=uid, **itinerary_data)
+            itinerary = Itinerary(id=iid, **itinerary_data)
 
         db.session.add(itinerary)
         db.session.commit()
 
-        return jsonify(id=itinerary.id, country_id=itinerary.country_id, user_id=itinerary.user_id, budget=itinerary.budget, title=itinerary.title ), 200
+        return (
+            jsonify(
+                id=itinerary.id,
+                country_id=itinerary.country_id,
+                user_id=itinerary.user_id,
+                budget=itinerary.budget,
+                title=itinerary.title,
+            ),
+            200,
+        )

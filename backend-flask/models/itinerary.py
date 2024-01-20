@@ -14,3 +14,4 @@ class ItineraryModel(db.Model):
 
     budget = db.Column(db.Float, nullable=False, default=0)
     title = db.Column(db.String(100), nullable=False)
+    itinerary_destination = db.relationship("ItineraryDestinationModel", backref="itinerary", lazy="dynamic", cascade="all, delete")
