@@ -126,7 +126,7 @@ const ItineraryCreate = () => {
           ))}
         </Form.Select>
         {selectedDest && selectedDest.map((itinDest) => (
-          <Badge bg='secondary'>{itinDest.name}</Badge>
+          <Col xs={3}><Badge bg='secondary' style={{display: 'flex'}}>{itinDest.name}</Badge></Col>
         ))}
 
       </Row>

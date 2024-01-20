@@ -87,11 +87,10 @@ function Home() {
         )
     const res = await axios.delete(`http://localhost:5000/itinerary_destination/${id}`);
 
-
     const data = await res.data;
     console.log(data)
 
-    // setItineraries(itineraries.filter((itinerary) => itinerary.id !== id));
+    setItineraries(itineraries.filter((itinerary) => itinerary.id !== id));
   };
 
   return (
