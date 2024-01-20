@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Form, Row, Button, Alert, Col, Container } from 'react-bootstrap';
+import axios from "axios";
+
 
 const DestinationCreate = () => {
   const [destination, setDestination] = useState({});
@@ -27,7 +29,28 @@ const DestinationCreate = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const createdDestination = {'a': 1};
+    axios.interceptors.request.use(
+    async function (config) {
+      // Check if accessToken is present
+        const sessionCookie = localStorage.getItem('auth-token')
+  
+        if (sessionCookie !== null && sessionCookie !== undefined) {
+          config.headers.Authorization = `Bearer ${sessionCookie}`
+        }
+  
+        return config
+      },
+      async function (error) {
+        return await Promise.reject(error)
+      }
+    )
+    const createDestination = {
+      country_id: destination.countryId,
+      cost: destination.cost,
+      name: destination.name,
+      notes: destination.notes
+    }
+    const createdDestination = axios.post("http://localhost:5000/destinations", createDestination);
     if (createdDestination) {
       setAlert({message: 'Please ensure that the destination name, country and cost is selected before submitting.', type: 'success'})
       return;
@@ -37,6 +60,11 @@ const DestinationCreate = () => {
     }
     // Make request
     // Redirect
+
+
+
+
+
   }
 
   return (
