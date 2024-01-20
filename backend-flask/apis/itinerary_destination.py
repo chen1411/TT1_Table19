@@ -20,12 +20,12 @@ class GetItineraryDestination(MethodView):
         itinerary_destination = ItineraryDestinationModel.query.get(id)
         return jsonify(id=itinerary_destination.id, 
                         itinerary_id=itinerary_destination.itinerary_id, 
-                        destination_id=itinerary_destination.destination_id) if itinerary_destination else jsonify(message="Itinerary, Destination not found"), 404
+                        destination_id=itinerary_destination.destination_id), 200
     
 @blp.route("/itinerary_destination")
 class AddItineraryDestination(MethodView):
     @jwt_required()
-    def put(self): 
+    def post(self): 
         itinerary_destination_data = request.json
         itinerary_destination = ItineraryDestinationModel(
             itinerary_id=itinerary_destination_data["itinerary_id"], 
@@ -34,7 +34,7 @@ class AddItineraryDestination(MethodView):
         db.session.add(itinerary_destination)
         db.session.commit()
 
-        return {"message": "Itinerary destination saved successfully."}, 201
+        return {"message": "Itinerary destination saved successfully."}, 200
     
 
 @blp.route("/itinerary_destination/<int:id>")
@@ -49,7 +49,7 @@ class DeletetineraryDestination(MethodView):
 @blp.route("/itinerary_destination")
 class UpdatetineraryDestination(MethodView):
     @jwt_required()
-    def post(self): 
+    def put(self): 
         itinerary_destination_data = request.json
         existing_itinerary_destination = ItineraryDestinationModel.query.get(itinerary_destination_data['id'])
 
