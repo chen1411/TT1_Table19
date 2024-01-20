@@ -8,6 +8,7 @@ import UserContext from './context/UserContext';
 import DestinationCreate from './destination/create';
 import DestinationEdit from './destination/edit';
 import { NavBar, Login, Signup, Home } from './components'
+import ItineraryCreate from './itinerary/create';
 
 function App() {
 
@@ -16,7 +17,6 @@ function App() {
         // user: undefined,
     });
 
-<<<<<<< Updated upstream
     // useEffect(() => {
     //     const checkLoggedIn = async () => {
     //         let token = localStorage.getItem("auth-token");
@@ -41,7 +41,6 @@ function App() {
     //     };
     //     checkLoggedIn();
     // }, []);
-=======
     useEffect(() => {
         const checkLoggedIn = async () => {
             let token = localStorage.getItem("auth-token");
@@ -72,7 +71,7 @@ function App() {
         };
         checkLoggedIn();
     }, []);
->>>>>>> Stashed changes
+
 
     return (
         <Router>
@@ -83,6 +82,7 @@ function App() {
                     <Route exact path='/login' element={<Login />} />
                     <Route exact path="/signup" element={<Signup />} />
                     <Route exact path="destination/create" element={<DestinationCreate />} />
+                    <Route exact path="itinerary/create" element={<ItineraryCreate />} />
                     <Route exact path="destination/:destinationId" element={<DestinationEdit />} />
                 </Routes>
             </UserContext.Provider>
