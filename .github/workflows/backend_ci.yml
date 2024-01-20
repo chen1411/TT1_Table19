@@ -28,7 +28,7 @@ jobs:
         with:
           envkey_DB_URL: ${{ secrets.DB_URL }}
           envkey_JWT_SCRET_KEY: ${{ secrets.JWT_SCRET_KEY }}
-          directory: ./backend-flask
+          directory: ./
           file_name: .env
           fail_on_empty: false
     
@@ -37,5 +37,5 @@ jobs:
   
       - name: Build Docker image
         run: docker build -t frontend:latest .
-        
+
     # Todolist: Implement backend code
