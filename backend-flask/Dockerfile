@@ -9,6 +9,7 @@ COPY . /app
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir Flask-JWT-Extended
 
 # Copy the environment file into the container
 COPY .env /app
@@ -17,4 +18,4 @@ COPY .env /app
 ENV ENV_FILE .env
 
 # Run python when the container launches
-CMD ["flask", "run"]
+CMD ["./entrypoint.sh"]
