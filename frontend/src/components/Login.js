@@ -31,7 +31,7 @@ function Login() {
         }
     }
     return (
-        <Container>
+        <Container fluid>
             <Row>
                 <Col xs={3} className="bg-danger"></Col>
                 <Col className="bg-dark"><Container

@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState, useContext } from "react";
-import { Form, Button, Card, Alert, Container } from "react-bootstrap";
+import { Form, Button, Card, Alert, Container, Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import UserContext from "../context/UserContext";
@@ -41,10 +41,9 @@ function Signup() {
     }
 
     return (
-        <Container
-            className="d-flex align-items-center justify-content-center"
-            style={{ minHeight: "100vh" }}
-        >
+        <Container fluid
+            className="bg-dark d-flex align-items-center justify-content-center"
+            style={{ minHeight: "100vh" }}>
             <div className="w-100" style={{ maxWidth: "400px" }}>
                 <>
                     <Card>
@@ -84,13 +83,13 @@ function Signup() {
                                         onChange={(e) => setLastname(e.target.value)}
                                     />
                                 </Form.Group>
-                                <Button disabled={loading} className="w-100 mt-2" type="submit">
+                                <Button variant="danger" disabled={loading} className="w-100 mt-2" type="submit">
                                     Sign Up
-                                </Button>
+                                    </Button>{' '}
                             </Form>
                         </Card.Body>
                     </Card>
-                    <div className="w-100 text-center mt-2">
+                    <div className="text-white w-100 text-center mt-2">
                         Already have an account? <Link to="/login">Log in</Link>
                     </div>
                 </>

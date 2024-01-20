@@ -16,7 +16,6 @@ function App() {
         // user: undefined,
     });
 
-<<<<<<< Updated upstream
     // useEffect(() => {
     //     const checkLoggedIn = async () => {
     //         let token = localStorage.getItem("auth-token");
@@ -41,7 +40,7 @@ function App() {
     //     };
     //     checkLoggedIn();
     // }, []);
-=======
+
     useEffect(() => {
         const checkLoggedIn = async () => {
             let token = localStorage.getItem("auth-token");
@@ -72,7 +71,6 @@ function App() {
         };
         checkLoggedIn();
     }, []);
->>>>>>> Stashed changes
 
     return (
         <Router>
