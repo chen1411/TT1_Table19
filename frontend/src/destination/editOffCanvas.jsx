@@ -2,26 +2,16 @@ import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import { Form, Row, Button, Alert, Container, Col } from 'react-bootstrap';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import axios from 'axios';
 
-const DestinationEdit = () => {
-  const [showCanvas, setCanvas] = useState(false); 
-
-  const handleClose = () => setCanvas(false); 
-  const handleShow = () => setCanvas(true);
-
-  const {destinationId} = useParams();
+const EditOffCanvas = (props) => {
+  console.log(props)
+  const {countries, destinationId, showCanvas, handleClose, handleShow} = props;
 
   const [destination, setDestination] = useState({});
-  const [countries, setCountries] = useState([]);
-  const [alert, setAlert] = useState({});
-
-  console.log(destination, destinationId);
+  const [alert, setAlert] = useState('');
 
   useEffect(() => {
     const fetchAllData = async () => {
-      const countriesData = await fetchCountries();
-      setCountries(countriesData);
       const existingDestination = await fetchExistingDestination(destinationId);
       setDestination(existingDestination);
     }
@@ -29,44 +19,9 @@ const DestinationEdit = () => {
     fetchAllData();
   }, [])
 
-  const fetchCountries = async () => {
-    axios.interceptors.request.use(
-      async function (config) {
-        // Check if accessToken is present
-          const sessionCookie = localStorage.getItem('auth-token')
-    
-          if (sessionCookie !== null && sessionCookie !== undefined) {
-            config.headers.Authorization = `Bearer ${sessionCookie}`
-          }
-    
-          return config
-        },
-        async function (error) {
-          return await Promise.reject(error)
-        }
-      )
-
-    const countriesData = axios.get('localhost:5000/country');
-    return countriesData;
-  }
-
   const fetchExistingDestination = async (destinationId) => {
-    axios.interceptors.request.use(
-      async function (config) {
-        // Check if accessToken is present
-          const sessionCookie = localStorage.getItem('auth-token')
-    
-          if (sessionCookie !== null && sessionCookie !== undefined) {
-            config.headers.Authorization = `Bearer ${sessionCookie}`
-          }
-    
-          return config
-        },
-        async function (error) {
-          return await Promise.reject(error)
-        }
-      )
-    const destinationData = await axios.get(`localhost:5000/destination/${destinationId}`);
+    // Replace with fetch single destination API call
+    const destinationData = {name: 'Test Destination', cost: 70, notes: "This is a description", countryId: 1};
     return destinationData;
   }
 
@@ -84,27 +39,29 @@ const DestinationEdit = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Update!')
-    const updatedDestination = {'a': 1};
+    
+    const updatedDestination = null;
     if (updatedDestination) {
-      setAlert({message: 'Successfully updated the destination.', type: 'success'})
-      // Redirect to homepage.
+      setAlert({message: 'Updated destination succesfully'})
       return;
     } else {
-      setAlert({message: 'An error occurred while creating the destination. Please refresh the page and try again.', type: 'danger'})
+      setAlert({message: 'An error occurred while creating the destination. Please refresh the page and try again.'})
       return;
     }
+
+    // Make request
+    // Redirect
   }
 
-  const handleDelete = async (e) => {
+  const handleDelete = (e) => {
     e.preventDefault();
-    return await axios.delete(`localhost:5000/destination/${destinationId}`);
+
+    // Make request to delete.
+    console.log('delete')
+    
   }
 
   return (
-  <Container>    
-    {alert.message && <Alert key={alert.type} variant={alert.type} className='my-2'>{alert.message}</Alert>}
-    <h1 className='mt-1'>Update an Existing Destination</h1>
-    <Button variant="primary" onClick={handleShow}> Launch </Button>
     <Offcanvas show={showCanvas} onHide={handleClose}>
         <Form onSubmit={handleSubmit} className='m-3'>
         <Row className='mb-3' rows={3}>
@@ -133,10 +90,10 @@ const DestinationEdit = () => {
             <Button className='mx-2' onClick={handleDelete} variant="danger">Delete Destination</Button>
             </Col>
         </Row>
+        {alert && <Row>alert</Row>}
         </Form>
     </Offcanvas>
-  </Container>
   )
 }
 
-export default DestinationEdit
+export default EditOffCanvas;
