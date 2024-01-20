@@ -18,4 +18,4 @@ COPY .env /app
 ENV ENV_FILE .env
 
 # Run python when the container launches
-CMD ["flask", "run"]
+CMD ["./entrypoint.sh"]
