@@ -12,28 +12,42 @@ function Home() {
   const [itineraries, setItineraries] = useState([]);
 
   useEffect(() => {
-    setItineraries([
-      {
-        id: 1,
-        title: "holiday",
-        country_name: "singapore",
-        budget: 1000,
-        destinations: [
-          { id: 1, name: "uss", notes: "theme park", cost: 70 },
-          { id: 2, name: "garden by the bay", notes: "park", cost: 0 },
-        ],
-      },
-      {
-        id: 2,
-        title: "grad trip",
-        country_name: "south korea",
-        budget: 2000,
-        destinations: [
-          { id: 1, name: "lotte world", notes: "theme park", cost: 50 },
-        ],
-      },
-    ]);
+    const getItineraries = async () => {
+        const itinerariesFromServer = await fetchItineraries();
+        setItineraries(itinerariesFromServer);
+      };
+  
+      getItineraries();
+
+    // setItineraries([
+    //   {
+    //     id: 1,
+    //     title: "holiday",
+    //     country_name: "singapore",
+    //     budget: 1000,
+    //     destinations: [
+    //       { id: 1, name: "uss", notes: "theme park", cost: 70 },
+    //       { id: 2, name: "garden by the bay", notes: "park", cost: 0 },
+    //     ],
+    //   },
+    //   {
+    //     id: 2,
+    //     title: "grad trip",
+    //     country_name: "south korea",
+    //     budget: 2000,
+    //     destinations: [
+    //       { id: 1, name: "lotte world", notes: "theme park", cost: 50 },
+    //     ],
+    //   },
+    // ]);
   }, []);
+
+  const fetchItineraries = async () => {
+    const res = await fetch("http://localhost:5000/itinerary");
+    const data = await res.json();
+
+    return data;
+  };
 
   const deleteItinerary = async (id) => {
     console.log(id);
