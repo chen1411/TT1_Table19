@@ -4,6 +4,7 @@ from db import db
 from flask_login import UserMixin
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
+from flask_cors import CORS
 import os
 from dotenv import load_dotenv
 from blocklist import BLOCKLIST
@@ -18,6 +19,7 @@ from apis.destination import blp as DestinationBlueprint
 from apis.itinerary import blp as ItineraryBlueprint
 
 app = Flask(__name__)
+cors =  CORS(app, resources={r"/api/*": {"origins": "*"}})
 load_dotenv()
 app.config["API_TITLE"] = "Stores REST API"
 app.config["API_VERSION"] = "v1"
