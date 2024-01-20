@@ -16,7 +16,7 @@ function Home() {
         const itinerariesFromServer = await fetchItineraries();
         setItineraries(itinerariesFromServer);
       };
-  
+
       getItineraries();
 
     // setItineraries([
@@ -69,39 +69,31 @@ function Home() {
   const deleteItinerary = async (id) => {
     console.log(id);
     // call delete  itinerary endpoint, input: user id from local storage
-    axios.interceptors.request.use(
-        async function (config) {
-          // Check if accessToken is present
-            const sessionCookie = localStorage.getItem('auth-token')
-      
-            if (sessionCookie !== null && sessionCookie !== undefined) {
-              config.headers.Authorization = `Bearer ${sessionCookie}`
-            }
-            console.log(sessionCookie);
-      
-            return config
-          },
-          async function (error) {
-            return await Promise.reject(error)
-          }
-        )
-    const res = await axios.delete(`http://localhost:5000/itinerary_destination/${id}`);
-
-
-    const data = await res.data;
-    console.log(data)
+    try {
+      const res = await fetch(
+        `http://localhost:5000/itinerary_destination/${id}`,
+        { method: "DELETE" }
+      );
+      const data = await res.json();
+      console.log(data);
+    } catch (e) {
+      console.log("");
+      alert("Error in deleting itinerary, please try again!")
+    }
 
     // setItineraries(itineraries.filter((itinerary) => itinerary.id !== id));
   };
 
   return (
     // style={{position: 'relative', top: '75px'}}
-    <div style={{backgroundColor: "black"}} > 
+    <div style={{ backgroundColor: "black" }}>
       {/* {userData.user 
             ? ( */}
       <div className="w-75 mx-auto">
-        <Stack direction="horizontal" gap={0}>
-          <h1 className="text-light">My Itineraries</h1>
+        <Stack direction="horizontal" gap={0} className="py-3">
+          <h1 className="text-light">
+            <u>My Itineraries</u>
+          </h1>
           <h1 className="ms-auto">
             <Link to="/signup">
               <i className="bi bi-plus-circle text-white"></i>
@@ -115,7 +107,7 @@ function Home() {
               <Accordion.Header>
                 <Stack gap={0}>
                   <div className="pe-3 pb-2">
-                    <Stack direction="horizontal" gap={0} >
+                    <Stack direction="horizontal" gap={0}>
                       <h3>{itinerary.title}</h3>
                       {/* change colours and update link */}
                       <h3 className="ms-auto pe-3">
