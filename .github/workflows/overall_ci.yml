@@ -2,7 +2,7 @@ name: Continuous Integration Workflow - Overall
 on:
   pull_request:
     branches:
-      - main # Run the workflow only on pull requests to the main branch
+      - master # Run the workflow only on pull requests to the main branch
     paths:
       - 'backend/**' # Workflow triggered on changes to code within express directory
       - 'frontend/**'
@@ -24,6 +24,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
 
       - name: Orchestrate microservices
         run: docker-compose -f "docker-compose.yml" up -d --build
