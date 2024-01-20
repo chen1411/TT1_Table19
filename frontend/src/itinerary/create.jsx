@@ -59,19 +59,20 @@ const ItineraryCreate = () => {
   const selectDestination = (event) => {
     //check if its default
     console.log(event.target.value)
-    const id = Number(event.target.value)
+    const id = event.target.value
     if (id!=='Open this select menu'){
       // add to itinerary.itineraryDestination
-      const currDest = destinations.filter((destination) => destination.id === id)
+      const currDest = destinations.find((destination) => destination.id === Number(id))
       console.log(destinations)
       const list = [...selectedDest];
       list.push(currDest)
       const updatedList = list;
-      setSelectedDest(updatedList[0])
+      setSelectedDest(updatedList)
       //remove from destinations
-      const filtered = destinations.filter((destination) => destination.id !== id)
+      const filtered = destinations.filter((destination) => destination.id !== Number(id))
       setDestinations(filtered)
-      console.log(updatedList[0])
+      console.log(updatedList)
+      event.target.value = 'Open this select menu'
     }
   }
 
@@ -124,7 +125,7 @@ const ItineraryCreate = () => {
           ))}
         </Form.Select>
         {selectedDest && selectedDest.map((itinDest) => (
-          <Badge bg='secondary'>{itinDest}</Badge>
+          <Badge bg='secondary'>{itinDest.name}</Badge>
         ))}
 
       </Row>
