@@ -26,7 +26,6 @@ packaging==23.2
 passlib==1.7.4
 protobuf==4.21.12
 pycparser==2.21
-PyJWT==2.8.0
 PyMySQL==1.1.0
 python-dotenv==1.0.0
 pytz==2023.3.post1
