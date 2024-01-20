@@ -11,6 +11,8 @@ from blocklist import BLOCKLIST
 import models
 
 from apis.users import blp as UserBlueprint
+from apis.itinerary import blp as ItineraryBlueprint
+
 
 app = Flask(__name__)
 load_dotenv()
@@ -78,4 +80,5 @@ def token_not_fresh_callback(jwt_header, jwt_payload):
 #     db.create_all()
 
 api.register_blueprint(UserBlueprint)
+api.register_blueprint(ItineraryBlueprint)
 

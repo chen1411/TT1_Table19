@@ -16,7 +16,7 @@ from passlib.hash import pbkdf2_sha256
 from db import db
 from models.itinerary import ItineraryModel
 
-blp = Blueprint("Itineraries", "itineraries", description="Operations on itineraries")
+blp = Blueprint("Itinerary", "itinerary", description="Operations on itineraries")
 
 
 
