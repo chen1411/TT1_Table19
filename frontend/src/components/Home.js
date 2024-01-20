@@ -105,7 +105,7 @@ function Home() {
             <u>My Itineraries</u>
           </h1>
           <h1 className="ms-auto">
-            <Link to="/signup">
+            <Link to="/itinerary/create/">
               <i className="bi bi-plus-circle text-white"></i>
             </Link>
           </h1>
@@ -121,7 +121,7 @@ function Home() {
                       <h3>{itinerary.title}</h3>
                       {/* change colours and update link */}
                       <h3 className="ms-auto pe-3">
-                        <Link to="/login">
+                        <Link to="/itinerary/edit/">
                           <i className="bi bi-pencil-square text-secondary"></i>
                         </Link>
                       </h3>
