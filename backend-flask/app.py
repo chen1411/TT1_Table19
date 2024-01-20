@@ -7,6 +7,7 @@ from flask_migrate import Migrate
 import os
 from dotenv import load_dotenv
 from blocklist import BLOCKLIST
+import flask_cors import CORS
 
 import models
 
@@ -31,6 +32,8 @@ api = Api(app)
 
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 jwt = JWTManager(app)
+
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 @jwt.token_in_blocklist_loader
 def check_if_token_in_blocklist(jwt_header, jwt_payload):
