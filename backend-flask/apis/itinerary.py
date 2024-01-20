@@ -2,6 +2,8 @@ from blocklist import BLOCKLIST
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from sqlalchemy.exc import SQLAlchemyError
+from .itinerary_destination import ItineraryDestinationModel
+from .destination import DestinationModel
 from flask import request, jsonify
 
 from flask_jwt_extended import (
@@ -26,20 +28,42 @@ class ItineraryList(MethodView):
     @jwt_required()
     def get(self):
         uid = get_jwt_identity()
-        itineraries = ItineraryModel.query.filter_by(user_id=uid).all()
+        itineraries_results = ItineraryModel.query.filter_by(user_id=uid).all()
+        itineraries = []
+
+        for itinerary in itineraries_results:
+            destinations = (
+                ItineraryModel.query.filter_by(id=itinerary.id)
+                .join(
+                    ItineraryDestinationModel,
+                    ItineraryModel.id
+                    == ItineraryDestinationModel.itinerary_id,
+                )
+                .add_column(ItineraryDestinationModel.destination_id)
+                .join(
+                    DestinationModel,
+                    ItineraryDestinationModel.destination_id
+                    == DestinationModel.id,
+                )
+                .add_column(DestinationModel.name)
+                .all()
+            )
+            itineraries.append(
+                {
+                    "id": itinerary.id,
+                    "country_id": itinerary.country_id,
+                    "user_id": itinerary.user_id,
+                    "budget": itinerary.budget,
+                    "title": itinerary.title,
+                    "destinations": [
+                        {"id": dest[1], "name": dest[2]}
+                        for dest in destinations
+                    ],
+                }
+            )
+
         return (
-            jsonify(
-                [
-                    {
-                        "id": itinerary.id,
-                        "country_id": itinerary.country_id,
-                        "user_id": itinerary.user_id,
-                        "budget": itinerary.budget,
-                        "title": itinerary.title,
-                    }
-                    for itinerary in itineraries
-                ]
-            ),
+            jsonify(itineraries),
             200,
         )
 
@@ -63,7 +87,7 @@ class ItineraryList(MethodView):
                 country_id=itinerary.country_id,
                 user_id=itinerary.user_id,
                 budget=itinerary.budget,
-                title=itinerary.title
+                title=itinerary.title,
             ),
             201,
         )
