@@ -11,11 +11,5 @@ COPY . /app
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install --no-cache-dir Flask-JWT-Extended
 
-# Copy the environment file into the container
-COPY .env /app
-
-# Define environment variable to specify the environment file
-ENV ENV_FILE .env
-
 # Run python when the container launches
 CMD ["./entrypoint.sh"]
