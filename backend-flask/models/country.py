@@ -10,3 +10,4 @@ class CountryModel(db.Model):
         unique=True,
         nullable=False,
     )
+    destinations = db.relationship("DestinationModel", back_ref="country", lazy="dynamic", cascade="all, delete")
