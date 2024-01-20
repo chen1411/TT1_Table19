@@ -1,23 +1,20 @@
-name: Continuous Integration Workflow - Backend
+name: Backend CI Workflow
+
 on:
   pull_request:
     branches:
-      - master # Run the workflow only on pull requests to the main branch
+      - master
     paths:
-      - 'backend-flask/**' # Workflow triggered on changes to code within express directory
+      - 'backend-flask/**'
       - '.github/workflows/backend_ci.yml'
 
 jobs:
   test:
-    defaults:
-        run:
-            working-directory: ./backend-flask
-
     runs-on: ubuntu-latest
     strategy:
-        matrix:
-          node-version: [18.x]
-          mongodb-version: ['5.0']
+      matrix:
+        node-version: [18.x]
+        mongodb-version: ['5.0']
 
     steps:
       - name: Checkout code
@@ -28,14 +25,18 @@ jobs:
         with:
           envkey_DB_URL: ${{ secrets.DB_URL }}
           envkey_JWT_SCRET_KEY: ${{ secrets.JWT_SCRET_KEY }}
-          directory: ./backend-flask
+          directory: backend-flask
           file_name: .env
           fail_on_empty: false
     
-      - name: Install dependencies
-        run: npm install
   
       - name: Build Docker image
-        run: docker build -t frontend:latest .
-        
-    # Todolist: Implement backend code
+        run: docker build -t backend:latest .
+        working-directory: backend-flask
+
+
+      - name: Run Docker image
+        run: docker run -d --name backend -p 5000:5000 backend:latest
+
+      - name: Check running container
+        run: docker ps
