@@ -18,7 +18,7 @@ function NavBar() {
     }
 
     return (
-        <Navbar bg="light" variant="light">
+        <Navbar bg="light" variant="light" sticky="top">
             <Wrapper href="/">
                 <img src={dbs_logo} width="75" height="75" alt="/" />
             </Wrapper>
