@@ -1,0 +1,41 @@
+name: Continuous Integration Workflow - Overall
+on:
+  pull_request:
+    branches:
+      - master # Run the workflow only on pull requests to the main branch
+    paths:
+      - 'backend-flask/**' # Workflow triggered on changes to code within express directory
+      - 'frontend/**'
+      - '.github/workflows/**'
+
+
+jobs:
+  test:
+    defaults:
+        run:
+            working-directory: .
+
+    runs-on: ubuntu-latest
+    strategy:
+        matrix:
+          node-version: [18.x]
+          mongodb-version: ['5.0']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+
+      - name: Create env for backend service
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_DB_URL: ${{ secrets.DB_URL }}
+          envkey_JWT_SCRET_KEY: ${{ secrets.JWT_SCRET_KEY }}
+          directory: ./backend-flask
+          file_name: .env
+          fail_on_empty: false
+
+      
+      - name: Orchestrate services
+        run: docker-compose -f "docker-compose.yml" up -d --build
+        working-directory: ./

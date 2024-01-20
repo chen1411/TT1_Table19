@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+
+  # frontend:
+  #   env_file:
+  #     - ./frontend/.env.prod
+  #   container_name: frontend
+  #   build: ./frontend
+  #   ports:
+  #     - 80:80
+
+
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: default_db
+      MYSQL_USER: default_user
+      MYSQL_PASSWORD: default_password
+    ports:
+      - "3306:3306"
+
+
+  # Add any new services below 
+
+  backend:
+    env_file:
+      - ./backend-flask/.env
+    container_name: backend
+    build: ./backend-flask
+    depends_on:
+      - mysql
+    ports:
+      - 5000:5000
+
+  frontend:
+    #env_file:
+    #  - ./frontend/.env.prod
+    container_name: frontend
+    build: ./frontend
+    ports:
+      - 3000:3000
+
