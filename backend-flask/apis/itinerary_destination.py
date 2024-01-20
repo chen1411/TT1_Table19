@@ -12,50 +12,70 @@ from flask_jwt_extended import (
     jwt_required,
 )
 
-blp = Blueprint("itinerary_destination", "itinerary_destination", description="Operations on Itinerary and Destination")
+blp = Blueprint(
+    "itinerary_destination",
+    "itinerary_destination",
+    description="Operations on Itinerary and Destination",
+)
+
 
 @blp.route("/itinerary_destination/<int:id>")
 class GetItineraryDestination(MethodView):
-    def get(self, id): 
+    @jwt_required()
+    def get(self, id):
         itinerary_destination = ItineraryDestinationModel.query.get(id)
-        return jsonify(id=itinerary_destination.id, 
-                        itinerary_id=itinerary_destination.itinerary_id, 
-                        destination_id=itinerary_destination.destination_id), 200
-    
+        return (
+            jsonify(
+                id=itinerary_destination.id,
+                itinerary_id=itinerary_destination.itinerary_id,
+                destination_id=itinerary_destination.destination_id,
+            ),
+            200,
+        )
+
+
 @blp.route("/itinerary_destination")
 class AddItineraryDestination(MethodView):
     @jwt_required()
-    def post(self): 
+    def post(self):
         itinerary_destination_data = request.json
         itinerary_destination = ItineraryDestinationModel(
-            itinerary_id=itinerary_destination_data["itinerary_id"], 
-            destination_id=itinerary_destination_data["destination_id"])
-        
+            itinerary_id=itinerary_destination_data["itinerary_id"],
+            destination_id=itinerary_destination_data["destination_id"],
+        )
+
         db.session.add(itinerary_destination)
         db.session.commit()
 
         return {"message": "Itinerary destination saved successfully."}, 200
-    
+
 
 @blp.route("/itinerary_destination/<int:id>")
 class DeletetineraryDestination(MethodView):
     @jwt_required()
-    def delete(self, id): 
+    def delete(self, id):
         itinerary_destination = ItineraryDestinationModel.query.get_or_404(id)
         db.session.delete(itinerary_destination)
         db.session.commit()
         return jsonify(message="Itinerary destination deleted."), 200
-    
+
+
 @blp.route("/itinerary_destination")
 class UpdatetineraryDestination(MethodView):
     @jwt_required()
-    def put(self): 
+    def put(self):
         itinerary_destination_data = request.json
-        existing_itinerary_destination = ItineraryDestinationModel.query.get(itinerary_destination_data['id'])
+        existing_itinerary_destination = ItineraryDestinationModel.query.get(
+            itinerary_destination_data["id"]
+        )
 
         if existing_itinerary_destination:
-            existing_itinerary_destination.itinerary_id = itinerary_destination_data["itinerary_id"]
-            existing_itinerary_destination.destination_id = itinerary_destination_data["destination_id"]
+            existing_itinerary_destination.itinerary_id = (
+                itinerary_destination_data["itinerary_id"]
+            )
+            existing_itinerary_destination.destination_id = (
+                itinerary_destination_data["destination_id"]
+            )
             db.session.commit()
             return jsonify(message="Itinerary destination updated."), 200
         else:
